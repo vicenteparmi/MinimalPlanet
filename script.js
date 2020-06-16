@@ -45,7 +45,13 @@ var variables = {
     orbitAngle: Math.random(),
     orbitPlanetR: 5,
     orbitPlanetColor: 'blue',
-    orbitSpeed: 0.00045
+    orbitSpeed: 0.00045,
+
+    // Smaller planet orbit
+    orbitAngle2: Math.random(),
+    orbitPlanetR2: 3,
+    orbitPlanetColor2: 'gray',
+    orbitSpeed2: 0.0006
 }
 
 function init() {
@@ -107,8 +113,9 @@ function animate() {
     var planetY = variables.planetY * cont.height;
     const planetR = variables.planetRadius;
 
-    // Orbiting Planet Path Calculations
-    var lineX, lineY;
+    // Orbiting Planets Path Calculations
+    // Larger
+    var lineX, lineY, lineX2, lineY2;
 
     if (variables.orbitAngle < 1) {
         variables.orbitAngle += variables.orbitSpeed;
@@ -122,6 +129,20 @@ function animate() {
     lineY = Math.sin(theta) * planetR * .65;
 
     const line = rotate(planetX, planetY, planetX + lineX, planetY + lineY, -14.3239);
+
+    // Smaller
+    if (variables.orbitAngle2 < 1) {
+        variables.orbitAngle2 += variables.orbitSpeed2;
+    } else {
+        variables.orbitAngle2 = 0;
+    }
+
+    var theta2 = variables.orbitAngle2 * (Math.PI * 2);
+
+    lineX2 = Math.cos(theta2) * planetR * 2;
+    lineY2 = Math.sin(theta2) * planetR * .25;
+
+    const line2 = rotate(planetX, planetY, planetX + lineX2, planetY + lineY2, -22.9183);
 
     // Render stars
     for (let i = 0; i < stars.length; i++) {
@@ -160,12 +181,19 @@ function animate() {
     ctx.strokeStyle = "hsl(0,0%,40%)"; 
     ctx.stroke();
 
-    // Draw Orbiting Planet Behind
+    // Draw Orbiting Planets Behind
     if (theta >= Math.PI) {
     ctx.beginPath();
     ctx.arc(line[0], line[1], variables.orbitPlanetR, 0, Math.PI * 2);
     ctx.fillStyle = variables.orbitPlanetColor;
     ctx.fill();
+    }
+
+    if (theta2 >= Math.PI) {
+        ctx.beginPath();
+        ctx.arc(line2[0], line2[1], variables.orbitPlanetR2, 0, Math.PI * 2);
+        ctx.fillStyle = variables.orbitPlanetColor2;
+        ctx.fill();
     }
 
     // Draw planet
@@ -185,11 +213,18 @@ function animate() {
     ctx.strokeStyle = "hsl(0,0%,40%)"; 
     ctx.stroke();
 
-    // Draw Orbiting Planet in front of the planet
+    // Draw Orbiting Planets in front of the planet
     if (theta < Math.PI) {
         ctx.beginPath();
         ctx.arc(line[0], line[1], variables.orbitPlanetR, 0, Math.PI * 2);
         ctx.fillStyle = variables.orbitPlanetColor;
+        ctx.fill();
+    }
+
+    if (theta2 < Math.PI) {
+        ctx.beginPath();
+        ctx.arc(line2[0], line2[1], variables.orbitPlanetR2, 0, Math.PI * 2);
+        ctx.fillStyle = variables.orbitPlanetColor2;
         ctx.fill();
     }
 
